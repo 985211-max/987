@@ -1,5 +1,7 @@
 # Smart Attendance System
 
+> 🇨🇳 **中文用户**：请查看 **[📖 保姆级使用教程 (SETUP_CN.md)](./SETUP_CN.md)** — 从"代码在哪里"到"系统跑起来"，手把手教你完成每一步。
+
 A full-stack web application for managing class attendance with real-time check-ins, QR codes, analytics, and automated email notifications.
 
 ## Features
