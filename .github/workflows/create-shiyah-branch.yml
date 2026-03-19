@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'copilot/merge-smart-attendance-system-again'
+      - 'main'
   workflow_dispatch:
 
 jobs:
