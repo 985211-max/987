@@ -1,0 +1,61 @@
+name: Create shiyah branch with smart attendance system
+
+on:
+  push:
+    branches:
+      - 'copilot/merge-smart-attendance-system-again'
+  workflow_dispatch:
+
+jobs:
+  create-shiyah:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up git identity
+        run: |
+          git config user.email "198982749+Copilot@users.noreply.github.com"
+          git config user.name "copilot-swe-agent[bot]"
+
+      - name: Create or update shiyah branch
+        run: |
+          git fetch origin
+
+          # Check if shiyah branch exists remotely
+          if git ls-remote --exit-code --heads origin shiyah; then
+            echo "shiyah branch exists, checking out..."
+            git checkout -b shiyah origin/shiyah
+          else
+            echo "Creating shiyah branch from main..."
+            git checkout -b shiyah origin/main
+          fi
+
+          # Check if the smart attendance system branch content is already merged
+          if git merge-base --is-ancestor origin/copilot/design-smart-attendance-system shiyah; then
+            echo "Smart attendance system code is already merged into shiyah."
+          else
+            echo "Merging smart attendance system code into shiyah..."
+            git merge origin/copilot/design-smart-attendance-system \
+              --no-ff \
+              -m "Merge smart attendance system into shiyah branch" \
+              --allow-unrelated-histories || true
+
+            # Resolve any conflicts by preferring the attendance system code
+            if git ls-files --unmerged | grep -q .; then
+              echo "Conflicts detected, resolving..."
+              git checkout --theirs -- .
+              git add .
+              git commit -m "Merge smart attendance system into shiyah branch (conflicts resolved)"
+            fi
+          fi
+
+          # Push to shiyah branch
+          git push origin shiyah
+          echo "Successfully pushed to shiyah branch!"
