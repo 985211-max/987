@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { USER_GUIDE_URL } from '../constants';
 
 export default function Navbar({ activeSection, setActiveSection }) {
   const { user, logout } = useAuth();
@@ -78,6 +79,11 @@ export default function Navbar({ activeSection, setActiveSection }) {
             ))}
           </ul>
           <div className="d-flex align-items-center gap-3">
+            {/* User Guide */}
+            <a href={USER_GUIDE_URL} target="_blank" rel="noopener noreferrer"
+              className="btn btn-outline-light btn-sm" title="使用指南 / User Guide">
+              <i className="fas fa-book-open me-1" aria-hidden="true"></i>使用指南
+            </a>
             {/* Notifications */}
             <div className="position-relative">
               <button className="btn btn-outline-light btn-sm position-relative" onClick={() => setShowNotifications(!showNotifications)}>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
+import { USER_GUIDE_URL } from '../constants';
 
 export default function Register() {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', role: 'student', studentId: '' });
@@ -84,7 +85,10 @@ export default function Register() {
 
                 <hr className="my-4" />
                 <div className="text-center">
-                  <p className="mb-0">Already have an account? <Link to="/login" className="text-primary fw-semibold">Sign in</Link></p>
+                  <p className="mb-2">Already have an account? <Link to="/login" className="text-primary fw-semibold">Sign in</Link></p>
+                  <a href={USER_GUIDE_URL} target="_blank" rel="noopener noreferrer" className="text-muted small">
+                    <i className="fas fa-book-open me-1" aria-hidden="true"></i>使用指南 / User Guide
+                  </a>
                 </div>
               </div>
             </div>
