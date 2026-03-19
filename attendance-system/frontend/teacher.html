@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智能晚点名系统 - 教师端</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/chart.umd.js"></script>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">📋 智能晚点名系统</div>
+    <div class="navbar-right">
+      <span id="userInfo" class="user-info"></span>
+      <button class="btn btn-sm btn-outline" id="logoutBtn">退出</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Overview Cards -->
+    <div class="stats-grid" id="overviewGrid">
+      <div class="stat-card blue">
+        <div class="stat-num" id="ov-sessions">-</div>
+        <div class="stat-label">累计签到次数</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-num" id="ov-students">-</div>
+        <div class="stat-label">班级学生数</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-num" id="ov-alerts">-</div>
+        <div class="stat-label">未读异常提醒</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-num" id="ov-today">-</div>
+        <div class="stat-label">今日签到状态</div>
+      </div>
+    </div>
+
+    <!-- Create Session -->
+    <div class="card">
+      <div class="card-header">
+        <h2>🚀 发起晚点名</h2>
+      </div>
+      <div class="card-body">
+        <form id="createSessionForm" class="inline-form">
+          <div class="form-group">
+            <label>班级</label>
+            <input type="text" id="sessionClass" placeholder="如：计算机2301班" required>
+          </div>
+          <div class="form-group">
+            <label>日期</label>
+            <input type="date" id="sessionDate" required>
+          </div>
+          <div class="form-group">
+            <label>签到截止时间</label>
+            <input type="time" id="sessionDeadline" required>
+          </div>
+          <button type="submit" class="btn btn-primary">发起签到</button>
+        </form>
+        <div id="sessionMsg" class="msg" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- Active Session Panel -->
+    <div class="card" id="activeSessionCard" style="display:none">
+      <div class="card-header">
+        <h2>✅ 当前签到会话</h2>
+        <div>
+          <span class="badge badge-green" id="activeSessionInfo"></span>
+          <button class="btn btn-sm btn-danger" id="closeSessionBtn">关闭签到</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span id="progressText">已签到 0/0</span>
+            <span id="progressRate">0%</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="progressBar" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="record-actions">
+          <button class="btn btn-sm btn-outline" id="refreshRecordsBtn">🔄 刷新</button>
+          <button class="btn btn-sm btn-warning" id="generateAlertsBtn">⚠️ 生成缺勤提醒</button>
+        </div>
+        <div class="table-wrap">
+          <table class="table" id="liveRecordTable">
+            <thead>
+              <tr>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>签到时间</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="liveRecordTbody">
+              <tr><td colspan="5" class="loading">加载中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts & Statistics -->
+    <div class="two-col">
+      <div class="card">
+        <div class="card-header"><h2>📈 出勤趋势</h2></div>
+        <div class="card-body">
+          <canvas id="trendChart" height="220"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h2>🥧 今日签到分布</h2></div>
+        <div class="card-body">
+          <canvas id="pieChart" height="220"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student Summary -->
+    <div class="card">
+      <div class="card-header"><h2>👥 学生出勤汇总</h2></div>
+      <div class="card-body">
+        <div class="table-wrap">
+          <table class="table" id="studentSummaryTable">
+            <thead>
+              <tr>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>总签到次数</th>
+                <th>出勤</th>
+                <th>迟到</th>
+                <th>缺勤</th>
+                <th>出勤率</th>
+                <th>风险</th>
+              </tr>
+            </thead>
+            <tbody id="studentSummaryTbody">
+              <tr><td colspan="8" class="loading">加载中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="card">
+      <div class="card-header">
+        <h2>🔔 异常提醒</h2>
+        <span class="badge badge-red" id="alertCount">0</span>
+      </div>
+      <div class="card-body">
+        <div id="alertList" class="alert-list">
+          <div class="empty-state">暂无异常提醒</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/teacher.js"></script>
+</body>
+</html>
